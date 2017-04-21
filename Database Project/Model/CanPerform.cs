@@ -12,10 +12,12 @@ namespace Database_Project.Model
     {
         [Key]
         [ForeignKey("Specialty")]
+        [Column(Order = 0)]
         public int SpecialtyID { get; set; }
 
         [Key]
         [ForeignKey("MedicalProcedure")]
+        [Column(Order = 1)]
         public int MedicalProcedureID { get; set; }
 
         public Specialty Specialty { get; set; }

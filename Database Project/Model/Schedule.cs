@@ -14,5 +14,7 @@ namespace Database_Project.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ScheduleID { get; set; }
+
+        public string ScheduleName { get; set; }
     }
 }

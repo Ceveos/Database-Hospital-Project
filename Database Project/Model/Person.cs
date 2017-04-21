@@ -17,7 +17,7 @@ namespace Database_Project.Model
         public string Name { get; set; }
 
         [ForeignKey("Schedule")]
-        public int ScheduleID { get; set; }
+        public int? ScheduleID { get; set; }
 
         public Schedule Schedule { get; set; }
     }

@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Database_Project.View"
         mc:Ignorable="d"
+        DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         Title="Hospital Statistics" Height="300" Width="500">
     <Grid>
+        <!--
         <lvc:PieChart LegendLocation="Bottom" DataClick="Chart_OnDataClick" Hoverable="False" DataTooltip="{x:Null}">
             <lvc:PieChart.Series>
                 <lvc:PieSeries Title="Disease" Values="3" DataLabels="True"
@@ -18,5 +20,6 @@
                                LabelPoint="{Binding PointLabel}"/>
             </lvc:PieChart.Series>
         </lvc:PieChart>
+        -->
     </Grid>
 </Window>

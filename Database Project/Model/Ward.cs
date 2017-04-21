@@ -11,6 +11,7 @@ namespace Database_Project.Model
     public class Ward
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int WardID { get; set; }
         public string Name { get; set; }
     }

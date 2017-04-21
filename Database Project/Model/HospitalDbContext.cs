@@ -10,12 +10,13 @@ using System.Data.Entity.Infrastructure;
 
 namespace Database_Project.Model
 {
-    public class Hospital : DbContext
+    public class HospitalDbContext : DbContext
     {
-        protected Hospital(DbCompiledModel model) : base(model)
+        public HospitalDbContext() : base("Data Source=HospitalDB.sdf;Persist Security Info=False;")
         {
+            Database.SetInitializer(new HospitalDbInitializer());
         }
-
+        
         // Type of people
         public DbSet<Patient> Patients { get; set; }
 
@@ -30,8 +31,18 @@ namespace Database_Project.Model
         // Patients have x condition
         public DbSet<HasCondition> HasConditions { get; set; }
 
-        // What specialty can cure a condition
+
+        // List of specialties
+        public DbSet<Specialty> Specialties { get; set; }
+
+        // List of procedures
+        public DbSet<MedicalProcedure> Procedures { get; set; }
+
+        // What procedure can cure a condition
         public DbSet<CanCure> CanCure { get; set; }
+
+        // What specialty can perform a procedure
+        public DbSet<CanPerform> CanPerform { get; set; }
 
         // Who contains that specialty
         public DbSet<HasSpecialty> HasSpecialty { get; set; }

@@ -8,24 +8,25 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Database_Project.Model
 {
-    public class Patient
+    public class Patient : Person
     {
-        [Key]
-        [ForeignKey("Person")]
-        public int PersonID {get;set;}
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
 
         [ForeignKey("NextOfKin")]
-        public int NextOfKinID { get; set; }
+        public int? NextOfKinID { get; set; }
 
         [ForeignKey("LivingWill")]
-        public int LivingWillID { get; set; }
+        public int? LivingWillID { get; set; }
 
         [ForeignKey("InsuranceCompany")]
-        public int InsuranceCompanyID { get; set; }
+        public int? InsuranceCompanyID { get; set; }
 
-        public Person Person { get; set; }
+        // Statistical information
+        public bool Dead { get; set; }
+        // Are we finished with this patient?
+        public bool Treated { get; set; }
+
         public Person NextOfKin { get; set; }
         public LivingWill LivingWill { get; set; }
         public InsuranceCompany InsuranceCompany { get; set; }

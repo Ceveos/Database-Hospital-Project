@@ -8,16 +8,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Database_Project.Model
 {
-    public class Nurse
+    public class Nurse : Person
     {
-        [Key]
-        [ForeignKey("Person")]
-        public int PersonID { get; set; }
-
         public string Rank { get; set; }
 
         public int WardID { get; set; }
-
-        public Person Person { get; set; }
+        
     }
 }

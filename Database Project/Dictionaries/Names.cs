@@ -513,17 +513,5 @@ namespace Database_Project.Dictionaries
             "Cory",
             "Cassandra"
         };
-
-        public static readonly List<String> Conditions = new List<string>()
-        {
-            "Strep Throat",
-            "HIV",
-            "STD",
-            "Spiked Drink",
-            "Drug Overdose",
-            "Database Finals",
-            "Kidney Failure",
-            "Crippling Depression"
-        };
     }
 }

@@ -11,6 +11,7 @@ namespace Database_Project.Model
     public class Operation
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int OperationID { get; set; }
 
         public int ProcedureID { get; set; }

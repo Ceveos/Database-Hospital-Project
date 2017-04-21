@@ -13,12 +13,15 @@ namespace Database_Project.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int RoomID { get; set; }
-        public int WardID { get; set; }
+
+        [ForeignKey("Ward")]
+        public int? WardID { get; set; }
         public int RoomNumber { get; set; }
+
         public float Price { get; set; }
 
         [ForeignKey("Schedule")]
-        public int ScheduleID { get; set; }
+        public int? ScheduleID { get; set; }
         
         /// <summary>
         /// Operating room or recovery room?
@@ -26,5 +29,6 @@ namespace Database_Project.Model
         public bool OFlag { get; set; }
 
         public Schedule Schedule { get; set; }
+        public Ward Ward { get; set; }
     }
 }

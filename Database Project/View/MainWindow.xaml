@@ -34,7 +34,7 @@
                 <StackPanel Grid.Column="1" Grid.Row="0" Margin="5">
 
                     <Label FontSize="20" Foreground="Green" HorizontalAlignment="Center"
-                       Content="{Binding Path=Profits}"/>
+                       Content="{Binding Path=Costs}"/>
                     <Label FontSize="20" Foreground="Red" HorizontalAlignment="Center"
                        Content="{Binding Path=Deaths}"/>
                     <Label FontWeight="Bold"  HorizontalAlignment="Center"
@@ -43,9 +43,9 @@
                            Content="Insurance deductible quote"/>
 
                 </StackPanel>
-                <Button Grid.Column="1" Grid.Row="1" Content="Progress month" Margin="5" />
+                <Button Grid.Column="1" Grid.Row="1" Content="Progress month" Margin="5" Command="{Binding Path=ProgressDay}"/>
                 <StackPanel Grid.Column="1" Grid.Row="2">
-                    <Label FontSize="25" HorizontalAlignment="Center" Content="01/01/2000"/>
+                    <Label FontSize="25" HorizontalAlignment="Center" Content="{Binding Path=CurrentDate}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="3" Margin="5">
                     <Label Content="Staff count" HorizontalAlignment="Center" FontWeight="Bold"/>
