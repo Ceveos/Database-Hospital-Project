@@ -21,37 +21,35 @@ namespace Database_Project.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private static Random _rand = new Random();
+        private HospitalStatistics hospitalStatistics = HospitalStatistics.Instance;
 
-        private static  float costs = 23050.50f;
         public string Costs
         {
             get
             {
-                return $"Costs: {costs:C2}";
+                return $"Costs: {hospitalStatistics.CurrentCosts:C2}";
             }
         }
 
-        private static int deaths = 13;
         public string Deaths {
             get
             {
-                return $"Deaths: {deaths}";
+                return $"Deaths: {hospitalStatistics.CurrentDeaths}";
             }
         }
 
-        public static event EventHandler ValuesChanged;
 
-        private static DateTime currentDate = Convert.ToDateTime("01/01/2017");
         public String CurrentDate
         {
             get
             {
-                return currentDate.ToString("MM/dd/yyyy");
+                return hospitalStatistics.CurrentDate.ToString("MM/dd/yyyy");
             }
         }
 
 
         public RelayCommand ProgressDay { get; set; }
+        public RelayCommand Stats { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -61,7 +59,15 @@ namespace Database_Project.ViewModel
 
             ProgressDay = new RelayCommand(ProgressTime, CanProgressTime);
 
-            ValuesChanged += UpdateValues;
+            Stats = new RelayCommand(ShowStats);
+
+            hospitalStatistics.ValuesChanged += UpdateValues;
+        }
+
+        public void ShowStats()
+        {
+            View.DeathsGraph graph = new View.DeathsGraph();
+            graph.Show();
         }
 
         public bool CanProgressTime()
@@ -74,10 +80,10 @@ namespace Database_Project.ViewModel
         {
             Model.HospitalDbContext dbContext = new Model.HospitalDbContext();
 
-            
+
 
             // Add a day 
-            currentDate = currentDate.AddDays(1);
+            hospitalStatistics.CurrentDate = hospitalStatistics.CurrentDate.AddDays(1);
 
             // Determine chance of adding patient(s)
             int patientsToAdd = _rand.Next(0, 5);
@@ -105,11 +111,12 @@ namespace Database_Project.ViewModel
                     MedicalCondition = dbContext.MedicalConditions.OrderBy(r => Guid.NewGuid()).First()
                 });
 
+                hospitalStatistics.CurrentAlive++;
             }
 
             dbContext.SaveChanges();
 
-            ValuesChanged?.Invoke(this, new EventArgs());
+            hospitalStatistics.TriggerEvent();
         }
 
         private void UpdateValues(object sender, EventArgs e)

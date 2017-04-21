@@ -4,22 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Database_Project.View"
+        xmlns:localModel="clr-namespace:Database_Project.ViewModel"
         mc:Ignorable="d"
-        DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
+        DataContext="{Binding Source={StaticResource Locator}, Path=GraphViewModel}"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         Title="Hospital Statistics" Height="300" Width="500">
     <Grid>
-        <!--
-        <lvc:PieChart LegendLocation="Bottom" DataClick="Chart_OnDataClick" Hoverable="False" DataTooltip="{x:Null}">
+        <lvc:PieChart AnimationsSpeed="0:0:0.5" LegendLocation="Bottom" Hoverable="False" Loaded="PieChart_Loaded">
             <lvc:PieChart.Series>
-                <lvc:PieSeries Title="Disease" Values="3" DataLabels="True"
-                               LabelPoint="{Binding PointLabel}"/>
-                <lvc:PieSeries Title="Neglect" Values="4" DataLabels="True" 
-                               LabelPoint="{Binding PointLabel}"/>
-                <lvc:PieSeries Title="Expense" Values="6" DataLabels="True" 
-                               LabelPoint="{Binding PointLabel}"/>
+                <lvc:PieSeries Title="Alive" Values="{Binding Alive}" DataLabels="True" />
+                <lvc:PieSeries Title="Dead" Values="{Binding Dead}" DataLabels="True"/>
             </lvc:PieChart.Series>
         </lvc:PieChart>
-        -->
     </Grid>
 </Window>

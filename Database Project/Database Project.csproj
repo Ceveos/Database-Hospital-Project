@@ -117,6 +117,7 @@
     <Compile Include="Model\Technician.cs" />
     <Compile Include="Model\TimeBlock.cs" />
     <Compile Include="Model\Ward.cs" />
+    <Compile Include="ViewModel\GraphViewModel.cs" />
     <Compile Include="ViewModel\HospitalStatistics.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />

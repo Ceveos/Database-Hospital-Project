@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Database_Project"
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
-        Title="Hospital" Height="350" Width="525">
+        Title="Hospital" Height="350" Width="525" WindowStartupLocation="CenterScreen">
     <Grid>
         <DockPanel>
             <StatusBar DockPanel.Dock="Bottom">
@@ -46,6 +46,7 @@
                 <Button Grid.Column="1" Grid.Row="1" Content="Progress month" Margin="5" Command="{Binding Path=ProgressDay}"/>
                 <StackPanel Grid.Column="1" Grid.Row="2">
                     <Label FontSize="25" HorizontalAlignment="Center" Content="{Binding Path=CurrentDate}"/>
+                    <Button Content="Stats" Command="{Binding Path=Stats}" />
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="3" Margin="5">
                     <Label Content="Staff count" HorizontalAlignment="Center" FontWeight="Bold"/>

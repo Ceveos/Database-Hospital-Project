@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LiveCharts;
+using LiveCharts.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,5 +25,10 @@ namespace Database_Project.View
         {
             InitializeComponent();
         }
+
+        private void PieChart_Loaded(object sender, RoutedEventArgs e)
+        {
+        }
+
     }
 }

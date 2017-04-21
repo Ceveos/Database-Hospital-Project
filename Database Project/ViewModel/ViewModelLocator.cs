@@ -43,6 +43,7 @@ namespace Database_Project.ViewModel
             ////}
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<GraphViewModel>();
         }
 
         public MainViewModel Main
@@ -52,7 +53,23 @@ namespace Database_Project.ViewModel
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
             }
         }
-        
+
+        public HospitalStatistics HospitalStatistic
+        {
+            get
+            {
+                return ViewModel.HospitalStatistics.Instance;
+            }
+        }
+
+        public GraphViewModel GraphViewModel
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<GraphViewModel>();
+            }
+        }
+
         public static void Cleanup()
         {
             // TODO Clear the ViewModels
