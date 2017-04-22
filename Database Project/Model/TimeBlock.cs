@@ -19,6 +19,8 @@ namespace Database_Project.Model
         [ForeignKey("Operation")]
         public int OperationID { get; set; }
 
+        public bool OFlag { get; set; }
+
         public Schedule Schedule { get; set; }
         public Operation Operation { get; set; }
     }

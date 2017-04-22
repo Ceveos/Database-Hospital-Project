@@ -14,9 +14,9 @@
             </StatusBar>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="3*"/>
@@ -60,7 +60,7 @@
                     <Label FontWeight="Bold"  HorizontalAlignment="Center"
                            Content="Last cause of death:"/>
                     <Label FontWeight="Light" HorizontalAlignment="Center"
-                           Content="Insurance deductible quote"/>
+                           Content="{Binding Path=LatestDeathReason}"/>
 
                 </StackPanel>
                 <Button Grid.Column="1" Grid.Row="1" Content="Progress month" Margin="5" Command="{Binding Path=ProgressDay}"/>
@@ -70,12 +70,17 @@
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="3" Margin="5">
                     <Label Content="Staff available" HorizontalAlignment="Center" FontWeight="Bold"/>
-                    <Label Content="Doctors: 5"/>
-                    <Label Content="Nurse: 1"/>
-
+                    <Label Content="{Binding Path=AvailableSurgeons}"/>
+                    <Label Content="{Binding Path=AvailableTechnicians}"/>
+                    <Label Content="{Binding Path=AvailableNurses}"/>
+                    
                     <Label Content="Rooms available" HorizontalAlignment="Center" FontWeight="Bold"/>
-                    <Label Content="Operating: 1"/>
-                    <Label Content="Recovery: 0"/>
+                    <Label Content="{Binding Path=AvailableOperatingRoom}"/>
+                    <Label Content="{Binding Path=AvailableRecoveryRoom}"/>
+
+                    <Label Content="Patient Stats" HorizontalAlignment="Center" FontWeight="Bold"/>
+                    <Label Content="{Binding Path=PatientsNeedingSurgery}"/>
+                    <Label Content="{Binding Path=PatientsNeedingRecovery}"/>
                 </StackPanel>
             </Grid>
         </DockPanel>

@@ -15,9 +15,12 @@ namespace Database_Project.Dictionaries
             "STD",
             "Spiked Drink",
             "Drug Overdose",
-            "Database Finals",
+           // "Database Finals",
             "Kidney Failure",
-            "Crippling Depression"
+            "Crippling Depression",
+            "Too Much Stress",
+            "Poverty",
+            "Marijuana"
         };
     }
 }

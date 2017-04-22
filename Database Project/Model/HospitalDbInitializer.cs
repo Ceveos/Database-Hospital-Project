@@ -58,16 +58,44 @@ namespace Database_Project.Model
             int room = 100;
             for (int i = 0; i < 30; i++)
             {
-                Schedule roomSchedule = new Schedule() { ScheduleName = Classes.Generator.GetFirstName() };
-
                 context.Rooms.Add(new Room()
                 {
                     Price = Classes.Generator.GetPrice(10000),
                     RoomNumber = room++,
-                    Schedule = roomSchedule,
+                    Schedule = new Schedule(),
                     OFlag = i >= 10,
                     Ward = ward
                 });
+            }
+
+            // Add surgeons/nurses/technicians
+            for (int i = 0; i < 10; i++)
+            {
+
+                Surgeon newSurgeon = new Surgeon()
+                {
+                    Name = Classes.Generator.GetFirstName(),
+                    Schedule = new Schedule(), 
+                    Wage = Classes.Generator.GetPrice(10000)
+                };
+
+                Nurse newNurse = new Nurse()
+                {
+                    Name = Classes.Generator.GetFirstName(),
+                    Schedule = new Schedule(),
+                    WardID = ward.WardID
+                };
+
+                Technician newTech = new Technician()
+                {
+                    Name = Classes.Generator.GetFirstName(),
+                    Schedule = new Schedule(),
+                    Wage = Classes.Generator.GetPrice(10000)
+                };
+
+                context.Surgeons.Add(newSurgeon);
+                context.Nurses.Add(newNurse);
+                context.Technicians.Add(newTech);
             }
 
 

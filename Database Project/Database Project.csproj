@@ -121,6 +121,10 @@
     <Compile Include="ViewModel\HospitalStatistics.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Page Include="View\DDay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\DeathsGraph.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -132,6 +136,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\DDay.xaml.cs">
+      <DependentUpon>DDay.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\DeathsGraph.xaml.cs">
       <DependentUpon>DeathsGraph.xaml</DependentUpon>

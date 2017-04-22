@@ -23,7 +23,10 @@ namespace Database_Project.Model
         public DbSet<Surgeon> Surgeons { get; set; }
 
         public DbSet<Nurse> Nurses { get; set; }
-        public DbSet<Technician> Technicians {get;set;}
+        public DbSet<Technician> Technicians {get; set;}
+
+        // Timeblock to manage schedule
+        public DbSet<TimeBlock> Timeblocks { get; set; }
 
         // List of Conditions
         public DbSet<MedicalCondition> MedicalConditions { get; set; }
