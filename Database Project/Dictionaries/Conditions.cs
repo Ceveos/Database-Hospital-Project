@@ -15,7 +15,6 @@ namespace Database_Project.Dictionaries
             "STD",
             "Spiked Drink",
             "Drug Overdose",
-           // "Database Finals",
             "Kidney Failure",
             "Crippling Depression",
             "Too Much Stress",

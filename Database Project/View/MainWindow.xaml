@@ -27,7 +27,6 @@
                 <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Margin="5">
                     <Label Content="Latest patients" HorizontalAlignment="Center" FontWeight="Bold"/>
                     <ListBox Height="250" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
                              ItemsSource="{Binding Path=LatestPatients, UpdateSourceTrigger=PropertyChanged}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
@@ -63,7 +62,7 @@
                            Content="{Binding Path=LatestDeathReason}"/>
 
                 </StackPanel>
-                <Button Grid.Column="1" Grid.Row="1" Content="Progress month" Margin="5" Command="{Binding Path=ProgressDay}"/>
+                <Button Grid.Column="1" Grid.Row="1" Content="Progress Day" Margin="5" Command="{Binding Path=ProgressDay}"/>
                 <StackPanel Grid.Column="1" Grid.Row="2">
                     <Label FontSize="25" HorizontalAlignment="Center" Content="{Binding Path=CurrentDate}"/>
                     <Button Content="Stats" Command="{Binding Path=Stats}" />

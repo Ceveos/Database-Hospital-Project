@@ -148,9 +148,22 @@ namespace Database_Project.ViewModel
         }
 
 
+        Model.MedicalCondition DDayCondition = new Model.MedicalCondition()
+        {
+            ConditionName = "Database Finals"
+        };
         public void ProgressTime()
         {
-            
+            bool dday = false;
+
+            if (hospitalStatistics.CurrentDate == Convert.ToDateTime("05/04/17"))
+            {
+                dday = true;
+                dbContext.MedicalConditions.Add(DDayCondition);
+                dbContext.SaveChanges();
+                LatestPatients.Clear();
+            }
+
             // Add a day 
             hospitalStatistics.CurrentDate = hospitalStatistics.CurrentDate.AddDays(1);
 
@@ -159,13 +172,16 @@ namespace Database_Project.ViewModel
             if (Classes.Generator.GetProbability() < 0.20)
                 patientsToAdd = 0;
 
+            if (dday)
+                patientsToAdd = 60;
+
             // Add patients
             for ( int i = 0; i < patientsToAdd; i++)
             {
                 // Define a new patient
                 Model.Patient patient = new Model.Patient()
                 {
-                    Name = Classes.Generator.GetFirstName(),
+                    Name = Classes.Generator.GetFirstName(dday),
                     Schedule = new Model.Schedule()
                 };
 
@@ -175,9 +191,9 @@ namespace Database_Project.ViewModel
 
                 // Add him to list of recent patients:
                 LatestPatients.Add(patient);
-
+                
                 // Remove old patient from the recent list
-                if (LatestPatients.Count > 11)
+                while (!dday && LatestPatients.Count > 11)
                 {
                     LatestPatients.RemoveAt(0);
                 }
@@ -187,7 +203,7 @@ namespace Database_Project.ViewModel
                 dbContext.HasConditions.Add(new Model.HasCondition()
                 {
                     Person = patient,
-                    MedicalCondition = dbContext.MedicalConditions.OrderBy(r => Guid.NewGuid()).First()
+                    MedicalCondition = dday ? DDayCondition : dbContext.MedicalConditions.OrderBy(r => Guid.NewGuid()).First()
                 });
 
                 hospitalStatistics.CurrentAlive++;
@@ -222,7 +238,7 @@ namespace Database_Project.ViewModel
 
 
             // See if we can put a patient into surgery 
-            while (patientsNeedingSurgery.Any() &&
+            while (!dday && patientsNeedingSurgery.Any() &&
                 availableSurgeons.Any() && availableTechnicians.Any() && availableOperatingRooms.Any())
             {
                 hospitalStatistics.CurrentCosts += Classes.Generator.GetPrice(15000);
@@ -268,7 +284,7 @@ namespace Database_Project.ViewModel
             dbContext.SaveChanges();
 
             // See if we can put a surgery patient into recovery
-            while (patientsNeedingRecovery.Any() &&
+            while (!dday && patientsNeedingRecovery.Any() &&
                 availableNurses.Any() && availableRecoveryRooms.Any())
             {
                 hospitalStatistics.CurrentCosts += Classes.Generator.GetPrice(7000);
@@ -315,17 +331,6 @@ namespace Database_Project.ViewModel
             this._patientsNeedingRecovery = patientsNeedingRecovery.Count();
 
 
-            // Couldn't get surgery? DEAD
-            foreach (var deadPatient in patientsNeedingSurgery)
-            {
-                //dbContext.Patients.First(x => x == deadPatient);
-                deadPatient.Dead = true;
-                hospitalStatistics.CurrentDeaths++;
-                hospitalStatistics.CurrentAlive--;
-                this.LatestDeathReason = $"Died from {dbContext.HasConditions.First(x => x.PersonID == deadPatient.PersonID).MedicalCondition.ConditionName}";
-            }
-
-            dbContext.SaveChanges();
 
             // Couldn't get into a recovery room? DEAD
             foreach (var deadPatient in patientsNeedingRecovery)
@@ -335,6 +340,18 @@ namespace Database_Project.ViewModel
                 hospitalStatistics.CurrentDeaths++;
                 hospitalStatistics.CurrentAlive--;
                 this.LatestDeathReason = $"Died from lack of recovery room";
+            }
+
+            dbContext.SaveChanges();
+
+            // Couldn't get surgery? DEAD
+            foreach (var deadPatient in patientsNeedingSurgery)
+            {
+                //dbContext.Patients.First(x => x == deadPatient);
+                deadPatient.Dead = true;
+                hospitalStatistics.CurrentDeaths++;
+                hospitalStatistics.CurrentAlive--;
+                this.LatestDeathReason = $"Died from {dbContext.HasConditions.First(x => x.PersonID == deadPatient.PersonID).MedicalCondition.ConditionName}";
             }
 
             dbContext.SaveChanges();

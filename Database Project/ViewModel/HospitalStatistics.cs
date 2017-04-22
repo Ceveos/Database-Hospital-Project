@@ -14,7 +14,7 @@ namespace Database_Project.ViewModel
         public int CurrentAlive { get; set; } = 0;
 
 
-        public DateTime CurrentDate = Convert.ToDateTime("03/14/2017");
+        public DateTime CurrentDate = Convert.ToDateTime("04/15/2017");
         public event EventHandler ValuesChanged;
 
 

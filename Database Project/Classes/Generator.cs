@@ -10,9 +10,18 @@ namespace Database_Project.Classes
     {
         private static Random _rand = new Random();
 
-        public static string GetFirstName()
+        public static string GetFirstName(bool dday=false)
         {
-            return Dictionaries.Names.FirstNames[_rand.Next(0, Dictionaries.Names.FirstNames.Count)];
+            if (dday)
+            {
+                string name = Dictionaries.Names.DDayNames[0];
+                Dictionaries.Names.DDayNames.RemoveAt(0);
+                return name;
+            }
+            else
+            {
+                return Dictionaries.Names.FirstNames[_rand.Next(0, Dictionaries.Names.FirstNames.Count)];
+            }
         }
 
         public static float GetPrice(int max)
