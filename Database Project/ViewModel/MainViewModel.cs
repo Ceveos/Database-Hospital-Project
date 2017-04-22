@@ -155,8 +155,8 @@ namespace Database_Project.ViewModel
             hospitalStatistics.CurrentDate = hospitalStatistics.CurrentDate.AddDays(1);
 
             // Determine chance of adding patient(s)
-            int patientsToAdd = _rand.Next(0, 5);
-            if (Classes.Generator.GetProbability() < 0.30)
+            int patientsToAdd = _rand.Next(1, 15);
+            if (Classes.Generator.GetProbability() < 0.20)
                 patientsToAdd = 0;
 
             // Add patients
@@ -193,44 +193,118 @@ namespace Database_Project.ViewModel
                 hospitalStatistics.CurrentAlive++;
             }
 
-            // Get available surgeons
-            var availableSurgeons = dbContext.Surgeons.Where(x => dbContext.Timeblocks.Where(y => y.ScheduleID == x.ScheduleID).All(y => y.Date != hospitalStatistics.CurrentDate.Date));
-
-            // Get available nurses
-            var availableNurses = dbContext.Nurses.Where(x => dbContext.Timeblocks.Where(y => y.ScheduleID == x.ScheduleID).All(y => y.Date != hospitalStatistics.CurrentDate.Date));
-
-            // Get available operating rooms
-            var availableOperatingRooms = dbContext.Rooms.Where(x => x.OFlag && dbContext.Timeblocks.Where(y => y.ScheduleID == x.ScheduleID).All(y => y.Date != hospitalStatistics.CurrentDate.Date));
-            
-            // Get available recovery rooms
-            var availableRecoveryRooms = dbContext.Rooms.Where(x => !x.OFlag && dbContext.Timeblocks.Where(y => y.ScheduleID == x.ScheduleID).All(y => y.Date != hospitalStatistics.CurrentDate.Date));
-            
-            // Get available technicians
-            var availableTechnicians = dbContext.Technicians.Where(x => dbContext.Timeblocks.Where(y => y.ScheduleID == x.ScheduleID).All(y => y.Date != hospitalStatistics.CurrentDate.Date));
-
-            // Get a list of patients that aren't treated doesn't have a time block
-            var patientsNeedingSurgery = dbContext.Patients.Where(x => !dbContext.Timeblocks.Any(y => y.ScheduleID == x.ScheduleID));
+            dbContext.SaveChanges();
 
             DateTime yesterday = hospitalStatistics.CurrentDate.Date.AddDays(-1);
 
+            // Get available surgeons
+            var availableSurgeons = dbContext.Surgeons.Where(x => dbContext.Timeblocks.Where(y => y.ScheduleID == x.ScheduleID).All(y => y.Date != hospitalStatistics.CurrentDate.Date)).ToList();
+
+            // Get available nurses
+            var availableNurses = dbContext.Nurses.Where(x => dbContext.Timeblocks.Where(y => y.ScheduleID == x.ScheduleID).All(y => y.Date != hospitalStatistics.CurrentDate.Date)).ToList();
+
+            // Get available operating rooms
+            var availableOperatingRooms = dbContext.Rooms.Where(x => x.OFlag && dbContext.Timeblocks.Where(y => y.ScheduleID == x.ScheduleID).All(y => y.Date != hospitalStatistics.CurrentDate.Date)).ToList();
+            
+            // Get available recovery rooms
+            var availableRecoveryRooms = dbContext.Rooms.Where(x => !x.OFlag && dbContext.Timeblocks.Where(y => y.ScheduleID == x.ScheduleID).All(y => y.Date != hospitalStatistics.CurrentDate.Date)).ToList();
+            
+            // Get available technicians
+            var availableTechnicians = dbContext.Technicians.Where(x => dbContext.Timeblocks.Where(y => y.ScheduleID == x.ScheduleID).All(y => y.Date != hospitalStatistics.CurrentDate.Date)).ToList();
+
+            // Get a list of patients that aren't treated and doesn't have a time block
+            var patientsNeedingSurgery = dbContext.Patients.Where(x => !x.Dead && !dbContext.Timeblocks.Any(y => y.ScheduleID == x.ScheduleID)).ToList();
+
             // Get a list of patients that aren't treated and had an operation yesterday
             var patientsNeedingRecovery = dbContext.Patients.Where(x => !x.Treated && dbContext.Timeblocks.Any(y => y.ScheduleID == x.ScheduleID
-                && y.Date == yesterday && y.OFlag));
+                && y.Date == yesterday && y.OFlag)).ToList();
 
-            //// See if we can put a patient into surgery 
-            //while (patientsNeedingSurgery.Any() &&
-            //    availableSurgeons.Any() && availableTechnicians.Any() && availableOperatingRooms.Any())
-            //{
 
-            //}
 
-            // couldn't get surgery? DEAD
-            foreach(var deadPatient in patientsNeedingSurgery)
+            // See if we can put a patient into surgery 
+            while (patientsNeedingSurgery.Any() &&
+                availableSurgeons.Any() && availableTechnicians.Any() && availableOperatingRooms.Any())
             {
-                deadPatient.Dead = true;
-                hospitalStatistics.CurrentDeaths++;
-                this.LatestDeathReason = $"Died from {dbContext.HasConditions.First(x => x.PersonID == deadPatient.PersonID).MedicalCondition.ConditionName}";
+                hospitalStatistics.CurrentCosts += Classes.Generator.GetPrice(15000);
+
+                dbContext.Timeblocks.Add(new Model.TimeBlock()
+                {
+                    Date = hospitalStatistics.CurrentDate,
+                    OFlag = true,
+                    Schedule = patientsNeedingSurgery.First().Schedule,
+                    Operation = new Model.Operation()
+                });
+
+                dbContext.Timeblocks.Add(new Model.TimeBlock()
+                {
+                    Date = hospitalStatistics.CurrentDate,
+                    OFlag = true,
+                    Schedule = availableSurgeons.First().Schedule,
+                    Operation = new Model.Operation()
+                });
+
+                dbContext.Timeblocks.Add(new Model.TimeBlock()
+                {
+                    Date = hospitalStatistics.CurrentDate,
+                    OFlag = true,
+                    Schedule = availableTechnicians.First().Schedule,
+                    Operation = new Model.Operation()
+                });
+
+                dbContext.Timeblocks.Add(new Model.TimeBlock()
+                {
+                    Date = hospitalStatistics.CurrentDate,
+                    OFlag = true,
+                    Schedule = availableOperatingRooms.First().Schedule,
+                    Operation = new Model.Operation()
+                });
+
+                patientsNeedingSurgery.RemoveAt(0);
+                availableSurgeons.RemoveAt(0);
+                availableTechnicians.RemoveAt(0);
+                availableOperatingRooms.RemoveAt(0);
             }
+
+            dbContext.SaveChanges();
+
+            // See if we can put a surgery patient into recovery
+            while (patientsNeedingRecovery.Any() &&
+                availableNurses.Any() && availableRecoveryRooms.Any())
+            {
+                hospitalStatistics.CurrentCosts += Classes.Generator.GetPrice(7000);
+
+                dbContext.Timeblocks.Add(new Model.TimeBlock()
+                {
+                    Date = hospitalStatistics.CurrentDate,
+                    OFlag = false,
+                    Schedule = patientsNeedingRecovery.First().Schedule,
+                    Operation = new Model.Operation()
+                });
+
+                dbContext.Timeblocks.Add(new Model.TimeBlock()
+                {
+                    Date = hospitalStatistics.CurrentDate,
+                    OFlag = false,
+                    Schedule = availableNurses.First().Schedule,
+                    Operation = new Model.Operation()
+                });
+
+                dbContext.Timeblocks.Add(new Model.TimeBlock()
+                {
+                    Date = hospitalStatistics.CurrentDate,
+                    OFlag = false,
+                    Schedule = availableRecoveryRooms.First().Schedule,
+                    Operation = new Model.Operation()
+                });
+
+                patientsNeedingRecovery.RemoveAt(0);
+                availableNurses.RemoveAt(0);
+                availableRecoveryRooms.RemoveAt(0);
+            }
+
+            dbContext.SaveChanges();
+
+
 
             this._availableSurgeons = availableSurgeons.Count();
             this._availableTechnicians = availableTechnicians.Count();
@@ -239,6 +313,29 @@ namespace Database_Project.ViewModel
             this._availableRecoveryRooms = availableRecoveryRooms.Count();
             this._patientsNeedingSurgery = patientsNeedingSurgery.Count();
             this._patientsNeedingRecovery = patientsNeedingRecovery.Count();
+
+
+            // Couldn't get surgery? DEAD
+            foreach (var deadPatient in patientsNeedingSurgery)
+            {
+                //dbContext.Patients.First(x => x == deadPatient);
+                deadPatient.Dead = true;
+                hospitalStatistics.CurrentDeaths++;
+                hospitalStatistics.CurrentAlive--;
+                this.LatestDeathReason = $"Died from {dbContext.HasConditions.First(x => x.PersonID == deadPatient.PersonID).MedicalCondition.ConditionName}";
+            }
+
+            dbContext.SaveChanges();
+
+            // Couldn't get into a recovery room? DEAD
+            foreach (var deadPatient in patientsNeedingRecovery)
+            {
+                //dbContext.Patients.First(x => x == deadPatient);
+                deadPatient.Dead = true;
+                hospitalStatistics.CurrentDeaths++;
+                hospitalStatistics.CurrentAlive--;
+                this.LatestDeathReason = $"Died from lack of recovery room";
+            }
 
             dbContext.SaveChanges();
 

@@ -11,9 +11,12 @@ namespace Database_Project.Model
     public class TimeBlock
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int TimeBlockID { get; set; }
+
         [ForeignKey("Schedule")]
-        public int ScheduleID { get; set; }
-        public int Time { get; set; }
+        public int? ScheduleID { get; set; }
+        public int? Time { get; set; }
         public DateTime Date { get; set; }
 
         [ForeignKey("Operation")]

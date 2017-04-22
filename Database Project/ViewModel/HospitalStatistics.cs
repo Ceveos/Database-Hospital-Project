@@ -9,12 +9,12 @@ namespace Database_Project.ViewModel
 {
     public class HospitalStatistics
     {
-        public float CurrentCosts { get; set; } = 23050.50f;
-        public int CurrentDeaths { get; set; } = 13;
-        public int CurrentAlive { get; set; } = 3;
+        public float CurrentCosts { get; set; } = 0f;
+        public int CurrentDeaths { get; set; } = 0;
+        public int CurrentAlive { get; set; } = 0;
 
 
-        public DateTime CurrentDate = Convert.ToDateTime("01/01/2017");
+        public DateTime CurrentDate = Convert.ToDateTime("03/14/2017");
         public event EventHandler ValuesChanged;
 
 

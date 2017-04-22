@@ -56,14 +56,14 @@ namespace Database_Project.Model
 
             // Generate rooms. Twice as many recovery rooms as procedures
             int room = 100;
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 25; i++)
             {
                 context.Rooms.Add(new Room()
                 {
                     Price = Classes.Generator.GetPrice(10000),
                     RoomNumber = room++,
                     Schedule = new Schedule(),
-                    OFlag = i >= 10,
+                    OFlag = i < 10,
                     Ward = ward
                 });
             }
