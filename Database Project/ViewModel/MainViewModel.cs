@@ -1,6 +1,8 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -20,6 +22,7 @@ namespace Database_Project.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
+        private Model.HospitalDbContext dbContext;
         private static Random _rand = new Random();
         private HospitalStatistics hospitalStatistics = HospitalStatistics.Instance;
 
@@ -47,6 +50,7 @@ namespace Database_Project.ViewModel
             }
         }
 
+        public ObservableCollection<Model.Patient> LatestPatients { get; set; } = new ObservableCollection<Model.Patient>();
 
         public RelayCommand ProgressDay { get; set; }
         public RelayCommand Stats { get; set; }
@@ -56,6 +60,7 @@ namespace Database_Project.ViewModel
         /// </summary>
         public MainViewModel()
         {
+            dbContext = new Model.HospitalDbContext();
 
             ProgressDay = new RelayCommand(ProgressTime, CanProgressTime);
 
@@ -78,10 +83,7 @@ namespace Database_Project.ViewModel
 
         public void ProgressTime()
         {
-            Model.HospitalDbContext dbContext = new Model.HospitalDbContext();
-
-
-
+            
             // Add a day 
             hospitalStatistics.CurrentDate = hospitalStatistics.CurrentDate.AddDays(1);
 
@@ -99,10 +101,19 @@ namespace Database_Project.ViewModel
                     Name = Classes.Generator.GetFirstName()
                 };
 
-                //dbContext.Rooms.Add(new Model.Room() { RoomNumber = 200 + i, Price = 10000});
-
+                
                 // Add him to the database
                 dbContext.Patients.Add(patient);
+
+                // Add him to list of recent patients:
+                LatestPatients.Add(patient);
+
+                // Remove old patient from the recent list
+                if (LatestPatients.Count > 11)
+                {
+                    LatestPatients.RemoveAt(0);
+                }
+
 
                 // Give him a disease
                 dbContext.HasConditions.Add(new Model.HasCondition()
@@ -124,6 +135,7 @@ namespace Database_Project.ViewModel
             RaisePropertyChanged(nameof(this.CurrentDate));
             RaisePropertyChanged(nameof(this.Costs));
             RaisePropertyChanged(nameof(this.Deaths));
+            RaisePropertyChanged(nameof(this.LatestPatients));
         }
     }
 }

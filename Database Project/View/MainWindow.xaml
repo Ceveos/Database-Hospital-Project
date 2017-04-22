@@ -26,9 +26,29 @@
 
                 <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Margin="5">
                     <Label Content="Latest patients" HorizontalAlignment="Center" FontWeight="Bold"/>
-                    <Label Content="Alex"/>
-                    <Label Content="Morgan"/>
-                    <Label Content="Fred"/>
+                    <ListBox Height="250" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                             ItemsSource="{Binding Path=LatestPatients, UpdateSourceTrigger=PropertyChanged}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Name}"
+                           Opacity="1">
+                                    <TextBlock.Triggers>
+                                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ThicknessAnimation Storyboard.TargetProperty="Margin"
+                                                     Duration="00:00:00.1"
+                                                     From="100 0 0 0"
+                                                     To="0 0 0 0 " />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </TextBlock.Triggers>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
 
                 </StackPanel>
                 <StackPanel Grid.Column="1" Grid.Row="0" Margin="5">
@@ -49,7 +69,7 @@
                     <Button Content="Stats" Command="{Binding Path=Stats}" />
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="3" Margin="5">
-                    <Label Content="Staff count" HorizontalAlignment="Center" FontWeight="Bold"/>
+                    <Label Content="Staff available" HorizontalAlignment="Center" FontWeight="Bold"/>
                     <Label Content="Doctors: 5"/>
                     <Label Content="Nurse: 1"/>
 
