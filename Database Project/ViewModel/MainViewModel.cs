@@ -305,9 +305,26 @@ namespace Database_Project.ViewModel
                     Operation = new Model.Operation()
                 });
 
+
+                dbContext.Timeblocks.Add(new Model.TimeBlock()
+                {
+                    Date = hospitalStatistics.CurrentDate.AddDays(1),
+                    OFlag = false,
+                    Schedule = availableNurses.First().Schedule,
+                    Operation = new Model.Operation()
+                });
+
                 dbContext.Timeblocks.Add(new Model.TimeBlock()
                 {
                     Date = hospitalStatistics.CurrentDate,
+                    OFlag = false,
+                    Schedule = availableRecoveryRooms.First().Schedule,
+                    Operation = new Model.Operation()
+                });
+
+                dbContext.Timeblocks.Add(new Model.TimeBlock()
+                {
+                    Date = hospitalStatistics.CurrentDate.AddDays(1),
                     OFlag = false,
                     Schedule = availableRecoveryRooms.First().Schedule,
                     Operation = new Model.Operation()
